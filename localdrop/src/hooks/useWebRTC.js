@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import Pusher from 'pusher-js';
 import { encryptText, decryptText, encryptFileBuffer, decryptFileBuffer } from '../utils/encryption';
 
 const CHUNK_SIZE = 16384; // 16 KB chunks for optimal WebRTC buffer flow
@@ -14,11 +15,14 @@ export function useWebRTC(roomKey) {
   useEffect(() => {
     localStorage.setItem('localdrop_files_history', JSON.stringify(filesHistory));
   }, [filesHistory]);
+
   const [receivedText, setReceivedText] = useState('');
 
-  const wsRef = useRef(null);
+  const pusherRef = useRef(null);
+  const channelRef = useRef(null);
   const pcRef = useRef(null);
   const dcRef = useRef(null);
+  const clientIdRef = useRef(crypto.randomUUID());
 
   // Buffer state for incoming files
   const incomingFileRef = useRef({
@@ -29,6 +33,26 @@ export function useWebRTC(roomKey) {
     lastBytes: 0,
     lastTime: 0
   });
+
+  // Helper to trigger signaling messages via Vercel Serverless Function
+  const sendSignalPayload = async (payload) => {
+    try {
+      await fetch('/api/signal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          roomKey,
+          eventName: 'client-signal',
+          payload: {
+            ...payload,
+            senderId: clientIdRef.current
+          }
+        })
+      });
+    } catch (err) {
+      console.error('Failed to dispatch Pusher signal:', err);
+    }
+  };
 
   const setupDataChannel = (dc) => {
     dcRef.current = dc;
@@ -136,13 +160,8 @@ export function useWebRTC(roomKey) {
     });
 
     pc.onicecandidate = (event) => {
-      if (event.candidate && wsRef.current?.readyState === WebSocket.OPEN) {
-        wsRef.current.send(
-          JSON.stringify({
-            type: 'SIGNAL',
-            payload: { candidate: event.candidate }
-          })
-        );
+      if (event.candidate) {
+        sendSignalPayload({ candidate: event.candidate });
       }
     };
 
@@ -152,22 +171,31 @@ export function useWebRTC(roomKey) {
 
     pcRef.current = pc;
     return pc;
-  }, []);
+  }, [roomKey]);
 
   useEffect(() => {
-    const host = window.location.hostname;
-    // Connect to WebSocket signaling server
-    const ws = new WebSocket(`ws://${host}:8080`);
-    wsRef.current = ws;
+    if (!roomKey) return;
 
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: 'JOIN_ROOM', roomKey }));
-    };
+    // Initialize Pusher Client
+    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
+      cluster: import.meta.env.VITE_PUSHER_CLUSTER,
+    });
+    pusherRef.current = pusher;
 
-    ws.onmessage = async (e) => {
-      const data = JSON.parse(e.data);
+    const channel = pusher.subscribe(`room-${roomKey}`);
+    channelRef.current = channel;
 
-      if (data.type === 'ROOM_JOINED' && data.isInitiator) {
+    channel.bind('pusher:subscription_succeeded', async () => {
+      // Send join announcement
+      await sendSignalPayload({ type: 'JOIN' });
+    });
+
+    channel.bind('client-signal', async (data) => {
+      // Ignore messages sent by ourselves
+      if (data.senderId === clientIdRef.current) return;
+
+      if (data.type === 'JOIN') {
+        // First peer initiates the WebRTC offer
         const pc = createPeerConnection();
         const dc = pc.createDataChannel('fileTransfer');
         setupDataChannel(dc);
@@ -175,46 +203,37 @@ export function useWebRTC(roomKey) {
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
 
-        ws.send(
-          JSON.stringify({
-            type: 'SIGNAL',
-            payload: { sdp: pc.localDescription }
-          })
-        );
-      } else if (data.type === 'SIGNAL') {
+        await sendSignalPayload({ sdp: pc.localDescription });
+      } else if (data.sdp) {
         if (!pcRef.current) createPeerConnection();
         const pc = pcRef.current;
 
-        if (data.payload.sdp) {
-          await pc.setRemoteDescription(new RTCSessionDescription(data.payload.sdp));
-          if (data.payload.sdp.type === 'offer') {
-            const answer = await pc.createAnswer();
-            await pc.setLocalDescription(answer);
-            ws.send(
-              JSON.stringify({
-                type: 'SIGNAL',
-                payload: { sdp: pc.localDescription }
-              })
-            );
-          }
-        } else if (data.payload.candidate) {
-          try {
-            await pc.addIceCandidate(new RTCIceCandidate(data.payload.candidate));
-          } catch (err) {
-            console.error('Error adding ICE candidate:', err);
-          }
+        await pc.setRemoteDescription(new RTCSessionDescription(data.sdp));
+
+        if (data.sdp.type === 'offer') {
+          const answer = await pc.createAnswer();
+          await pc.setLocalDescription(answer);
+          await sendSignalPayload({ sdp: pc.localDescription });
         }
-      } else if (data.type === 'PEER_DISCONNECTED') {
-        setIsConnected(false);
-        if (pcRef.current) {
-          pcRef.current.close();
-          pcRef.current = null;
+      } else if (data.candidate) {
+        try {
+          if (pcRef.current) {
+            await pcRef.current.addIceCandidate(new RTCIceCandidate(data.candidate));
+          }
+        } catch (err) {
+          console.error('Error adding ICE candidate:', err);
         }
       }
-    };
+    });
 
     return () => {
-      ws.close();
+      if (channelRef.current) {
+        channelRef.current.unbind_all();
+        pusher.unsubscribe(`room-${roomKey}`);
+      }
+      if (pusherRef.current) {
+        pusherRef.current.disconnect();
+      }
       if (pcRef.current) {
         pcRef.current.close();
         pcRef.current = null;
