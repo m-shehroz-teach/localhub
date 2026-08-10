@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "express": "^5.2.1",
+    "lucide-react": "^1.31.0",
+    "qrcode.react": "^4.2.0",
+    "ws": "^8.21.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^4.3.3"
+  }
+}
