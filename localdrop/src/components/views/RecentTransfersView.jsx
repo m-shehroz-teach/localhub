@@ -7,6 +7,10 @@ import {
 
 export default function RecentTransfersView({ filesHistory = [] }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterType, setFilterType] = useState('all'); // 'all', 'sent', 'received'
+  const [filterDate, setFilterDate] = useState('all'); // 'all', 'today', 'yesterday'
+  const [showTypeDropdown, setShowTypeDropdown] = useState(false);
+  const [showDateDropdown, setShowDateDropdown] = useState(false);
   const [storageStats, setStorageStats] = useState({
     percentage: 65,
     usageStr: '128 GB',
@@ -56,11 +60,24 @@ export default function RecentTransfersView({ filesHistory = [] }) {
 
   const displayHistory = filesHistory.map(mapHistoryItem);
 
-  // Filter transfers based on search query
-  const filteredTransfers = displayHistory.filter(item => 
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.peer.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter transfers based on search query, type, and date
+  const filteredTransfers = displayHistory.filter(item => {
+    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.peer.toLowerCase().includes(searchQuery.toLowerCase());
+      
+    const matchesType = filterType === 'all' || 
+      (filterType === 'sent' && item.direction === 'Sent') ||
+      (filterType === 'received' && item.direction === 'Received');
+      
+    let matchesDate = true;
+    if (filterDate === 'today') {
+      matchesDate = item.datetime.toLowerCase().includes('today');
+    } else if (filterDate === 'yesterday') {
+      matchesDate = item.datetime.toLowerCase().includes('yesterday');
+    }
+    
+    return matchesSearch && matchesType && matchesDate;
+  });
 
   const getFileIcon = (filename) => {
     const ext = filename.split('.').pop().toLowerCase();
@@ -146,15 +163,79 @@ export default function RecentTransfersView({ filesHistory = [] }) {
           />
         </div>
 
-        {/* Action Buttons */}
-        <button className="px-4 py-3 rounded-2xl bg-[#0c0f1d] border border-[#1d263b]/50 hover:bg-[#151a2d] text-slate-300 text-xs font-semibold flex items-center gap-2 transition-all">
-          <SlidersHorizontal className="w-3.5 h-3.5" />
-          Filter Type
-        </button>
-        <button className="px-4 py-3 rounded-2xl bg-[#0c0f1d] border border-[#1d263b]/50 hover:bg-[#151a2d] text-slate-300 text-xs font-semibold flex items-center gap-2 transition-all">
-          <Calendar className="w-3.5 h-3.5" />
-          Date Range
-        </button>
+        {/* Filter Type Button with Dropdown */}
+        <div className="relative">
+          <button 
+            onClick={() => { setShowTypeDropdown(!showTypeDropdown); setShowDateDropdown(false); }}
+            className="px-4 py-3 rounded-2xl bg-[#0c0f1d] border border-[#1d263b]/50 hover:bg-[#151a2d] text-slate-300 text-xs font-semibold flex items-center gap-2 transition-all"
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            Filter: {filterType === 'all' ? 'All' : filterType === 'sent' ? 'Sent' : 'Received'}
+          </button>
+          
+          {showTypeDropdown && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setShowTypeDropdown(false)} />
+              <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-[#0c0f1d] border border-[#1d263b] shadow-xl z-20 overflow-hidden py-1">
+                <button 
+                  onClick={() => { setFilterType('all'); setShowTypeDropdown(false); }}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterType === 'all' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                >
+                  All Transfers
+                </button>
+                <button 
+                  onClick={() => { setFilterType('sent'); setShowTypeDropdown(false); }}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterType === 'sent' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                >
+                  Sent Only
+                </button>
+                <button 
+                  onClick={() => { setFilterType('received'); setShowTypeDropdown(false); }}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterType === 'received' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                >
+                  Received Only
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Date Range Button with Dropdown */}
+        <div className="relative">
+          <button 
+            onClick={() => { setShowDateDropdown(!showDateDropdown); setShowTypeDropdown(false); }}
+            className="px-4 py-3 rounded-2xl bg-[#0c0f1d] border border-[#1d263b]/50 hover:bg-[#151a2d] text-slate-300 text-xs font-semibold flex items-center gap-2 transition-all"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            Date: {filterDate === 'all' ? 'All Time' : filterDate === 'today' ? 'Today' : 'Yesterday'}
+          </button>
+          
+          {showDateDropdown && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setShowDateDropdown(false)} />
+              <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-[#0c0f1d] border border-[#1d263b] shadow-xl z-20 overflow-hidden py-1">
+                <button 
+                  onClick={() => { setFilterDate('all'); setShowDateDropdown(false); }}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterDate === 'all' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                >
+                  All Time
+                </button>
+                <button 
+                  onClick={() => { setFilterDate('today'); setShowDateDropdown(false); }}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterDate === 'today' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                >
+                  Today
+                </button>
+                <button 
+                  onClick={() => { setFilterDate('yesterday'); setShowDateDropdown(false); }}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterDate === 'yesterday' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                >
+                  Yesterday
+                </button>
+              </div>
+            </>
+          )}
+        </div>
         <button className="p-3 rounded-2xl bg-[#0c0f1d] border border-[#1d263b]/50 hover:bg-[#151a2d] text-slate-300 transition-all">
           <MoreVertical className="w-3.5 h-3.5" />
         </button>
