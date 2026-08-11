@@ -13,6 +13,7 @@ export default function DashboardView({
   roomKey,
   deviceName,
   peerDeviceName,
+  onCancelTransfer,
 }) {
   const [copied, setCopied] = useState(false);
   const [activeRightTab, setActiveRightTab] = useState('qr'); // 'qr' or 'key'
@@ -110,8 +111,10 @@ export default function DashboardView({
         {/* Active Transfer Progress Container */}
         {activeTransfer && (
           <div className="bg-[#121625] border border-[#242f4c]/80 rounded-3xl p-6 relative shadow-xl shadow-black/10">
-            {/* Cancel Button */}
-            <button className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#1c2237]/80 hover:bg-[#252f4c] text-slate-400 hover:text-white flex items-center justify-center border border-[#2e3b5e]/40 transition-colors">
+            <button 
+              onClick={onCancelTransfer}
+              className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#1c2237]/80 hover:bg-[#252f4c] text-slate-400 hover:text-white flex items-center justify-center border border-[#2e3b5e]/40 transition-colors"
+            >
               <X className="w-4 h-4" />
             </button>
             

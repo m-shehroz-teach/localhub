@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Pusher from 'pusher-js';
 import { encryptText, decryptText, encryptFileBuffer, decryptFileBuffer } from '../utils/encryption';
 
-const CHUNK_SIZE = 16384; // 16 KB chunks for optimal WebRTC buffer flow
+const CHUNK_SIZE = 65536; // 64 KB chunks for optimal WebRTC buffer flow
 
 export function useWebRTC(roomKey, localDeviceName) {
   const [isConnected, setIsConnected] = useState(false);
@@ -24,6 +24,32 @@ export function useWebRTC(roomKey, localDeviceName) {
   const pcRef = useRef(null);
   const dcRef = useRef(null);
   const clientIdRef = useRef(crypto.randomUUID());
+  const isCancelledRef = useRef(false);
+
+  const cancelTransfer = useCallback(() => {
+    isCancelledRef.current = true;
+    
+    // Reset incoming file buffer state
+    incomingFileRef.current = {
+      metadata: null,
+      receivedChunks: [],
+      receivedSize: 0,
+      startTime: 0,
+      lastBytes: 0,
+      lastTime: 0
+    };
+
+    // Send cancel signal to the peer
+    if (dcRef.current && dcRef.current.readyState === 'open') {
+      try {
+        dcRef.current.send(JSON.stringify({ type: 'FILE_CANCEL' }));
+      } catch (err) {
+        console.error('Failed to send FILE_CANCEL message:', err);
+      }
+    }
+
+    setActiveTransfer(null);
+  }, []);
 
   // Buffer state for incoming files
   const incomingFileRef = useRef({
@@ -74,6 +100,7 @@ export function useWebRTC(roomKey, localDeviceName) {
             console.error('Failed to decrypt clipboard content:', err);
           }
         } else if (message.type === 'FILE_START') {
+          isCancelledRef.current = false;
           incomingFileRef.current = {
             metadata: message.metadata,
             receivedChunks: [],
@@ -90,6 +117,17 @@ export function useWebRTC(roomKey, localDeviceName) {
             timeRemaining: 'Calculating...',
             direction: 'receiving'
           });
+        } else if (message.type === 'FILE_CANCEL') {
+          isCancelledRef.current = true;
+          incomingFileRef.current = {
+            metadata: null,
+            receivedChunks: [],
+            receivedSize: 0,
+            startTime: 0,
+            lastBytes: 0,
+            lastTime: 0
+          };
+          setActiveTransfer(null);
         }
       } else if (e.data instanceof ArrayBuffer) {
         const fileState = incomingFileRef.current;
@@ -251,6 +289,7 @@ export function useWebRTC(roomKey, localDeviceName) {
     if (!dcRef.current || dcRef.current.readyState !== 'open') return;
 
     const dc = dcRef.current;
+    isCancelledRef.current = false;
 
     // Encrypt the entire file buffer first
     const arrayBuffer = await file.arrayBuffer();
@@ -289,11 +328,16 @@ export function useWebRTC(roomKey, localDeviceName) {
       direction: 'sending'
     });
 
-    const readChunk = () => {
+    dc.bufferedAmountLowThreshold = 524288; // 512 KB
+
+    const sendNextChunks = () => {
       while (offset < encryptedBuffer.byteLength) {
-        if (dc.bufferedAmount > CHUNK_SIZE * 8) {
-          // Pause reading when buffer is backed up
-          setTimeout(readChunk, 10);
+        if (isCancelledRef.current) {
+          dc.onbufferedamountlow = null;
+          return;
+        }
+
+        if (dc.bufferedAmount > 1048576) { // 1 MB
           return;
         }
 
@@ -327,22 +371,30 @@ export function useWebRTC(roomKey, localDeviceName) {
         }
       }
 
-      // Record Sent File in History
-      setFilesHistory((prev) => [
-        {
-          id: crypto.randomUUID(),
-          name: file.name,
-          size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
-          type: 'Sent',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        },
-        ...prev
-      ]);
+      if (offset >= encryptedBuffer.byteLength && !isCancelledRef.current) {
+        dc.onbufferedamountlow = null;
 
-      setActiveTransfer(null);
+        // Record Sent File in History
+        setFilesHistory((prev) => [
+          {
+            id: crypto.randomUUID(),
+            name: file.name,
+            size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+            type: 'Sent',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          },
+          ...prev
+        ]);
+
+        setActiveTransfer(null);
+      }
     };
 
-    readChunk();
+    dc.onbufferedamountlow = () => {
+      sendNextChunks();
+    };
+
+    sendNextChunks();
   };
 
   const sendClipboard = async (text) => {
@@ -368,6 +420,7 @@ export function useWebRTC(roomKey, localDeviceName) {
     receivedText,
     peerDeviceName,
     sendFile,
+    cancelTransfer,
     sendClipboard,
     setFilesHistory
   };

@@ -73,6 +73,7 @@ export default function App() {
     receivedText,
     peerDeviceName,
     sendFile,
+    cancelTransfer,
     sendClipboard
   } = useWebRTC(roomKey, deviceName);
 
@@ -185,6 +186,7 @@ export default function App() {
               roomKey={roomKey}
               deviceName={deviceName}
               peerDeviceName={peerDeviceName}
+              onCancelTransfer={cancelTransfer}
             />
           )}
 
