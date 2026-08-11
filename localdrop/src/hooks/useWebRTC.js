@@ -169,7 +169,16 @@ export function useWebRTC(roomKey, localDeviceName) {
             const combinedBuffer = await combinedBlob.arrayBuffer();
             const decryptedBuffer = await decryptFileBuffer(combinedBuffer, roomKey);
             
-            const blob = new Blob([decryptedBuffer], { type: fileState.metadata.mime });
+            let decompressedBuffer;
+            try {
+              const stream = new Response(decryptedBuffer).body.pipeThrough(new DecompressionStream('gzip'));
+              decompressedBuffer = await new Response(stream).arrayBuffer();
+            } catch (err) {
+              console.warn('Decompression failed, falling back to decrypted buffer:', err);
+              decompressedBuffer = decryptedBuffer;
+            }
+            
+            const blob = new Blob([decompressedBuffer], { type: fileState.metadata.mime });
             const downloadUrl = URL.createObjectURL(blob);
 
             setFilesHistory((prev) => [
@@ -291,11 +300,21 @@ export function useWebRTC(roomKey, localDeviceName) {
     const dc = dcRef.current;
     isCancelledRef.current = false;
 
-    // Encrypt the entire file buffer first
+    // Compress the entire file buffer first using CompressionStream
     const arrayBuffer = await file.arrayBuffer();
+    let compressedBuffer;
+    try {
+      const stream = new Response(arrayBuffer).body.pipeThrough(new CompressionStream('gzip'));
+      compressedBuffer = await new Response(stream).arrayBuffer();
+    } catch (err) {
+      console.warn('Compression failed, falling back to original buffer:', err);
+      compressedBuffer = arrayBuffer;
+    }
+
+    // Encrypt the compressed buffer
     let encryptedBuffer;
     try {
-      encryptedBuffer = await encryptFileBuffer(arrayBuffer, roomKey);
+      encryptedBuffer = await encryptFileBuffer(compressedBuffer, roomKey);
     } catch (err) {
       console.error('Encryption of file failed:', err);
       return;
@@ -374,6 +393,11 @@ export function useWebRTC(roomKey, localDeviceName) {
       }
 
       if (offset >= encryptedBuffer.byteLength && !isCancelledRef.current) {
+        if (dc.bufferedAmount > 0) {
+          // Set threshold to 0 to be notified when the remaining buffer is completely empty
+          dc.bufferedAmountLowThreshold = 0;
+          return;
+        }
         dc.onbufferedamountlow = null;
 
         // Record Sent File in History
