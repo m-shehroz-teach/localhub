@@ -71,9 +71,10 @@ export default function App() {
     activeTransfer,
     filesHistory,
     receivedText,
+    peerDeviceName,
     sendFile,
     sendClipboard
-  } = useWebRTC(roomKey);
+  } = useWebRTC(roomKey, deviceName);
 
   // --- LIVE CLIPBOARD STATE & HISTORY ---
   const [clipboardText, setClipboardText] = useState(() => {
@@ -183,6 +184,7 @@ export default function App() {
               isConnected={isConnected}
               roomKey={roomKey}
               deviceName={deviceName}
+              peerDeviceName={peerDeviceName}
             />
           )}
 

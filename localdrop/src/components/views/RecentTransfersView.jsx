@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Search, SlidersHorizontal, Calendar, MoreVertical, 
   FileText, ArrowUpRight, ArrowDownLeft, CheckCircle2, 
@@ -7,6 +7,36 @@ import {
 
 export default function RecentTransfersView({ filesHistory = [] }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [storageStats, setStorageStats] = useState({
+    percentage: 65,
+    usageStr: '128 GB',
+    quotaStr: '256 GB'
+  });
+
+  useEffect(() => {
+    if (navigator.storage && navigator.storage.estimate) {
+      navigator.storage.estimate().then((estimate) => {
+        const usageBytes = estimate.usage || 0;
+        const quotaBytes = estimate.quota || 0;
+        
+        const formatBytes = (bytes) => {
+          if (bytes === 0) return '0 B';
+          const k = 1024;
+          const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        };
+
+        const pct = quotaBytes > 0 ? Math.round((usageBytes / quotaBytes) * 100) : 0;
+        
+        setStorageStats({
+          percentage: pct,
+          usageStr: formatBytes(usageBytes),
+          quotaStr: formatBytes(quotaBytes)
+        });
+      });
+    }
+  }, []);
 
   const mapHistoryItem = (item) => {
     return {
@@ -82,18 +112,18 @@ export default function RecentTransfersView({ filesHistory = [] }) {
               <path
                 className="text-[#7b80ff]"
                 strokeWidth="3.5"
-                strokeDasharray="65, 100"
+                strokeDasharray={`${storageStats.percentage}, 100`}
                 strokeLinecap="round"
                 stroke="currentColor"
                 fill="none"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
             </svg>
-            <span className="absolute text-[10px] font-mono font-bold text-white">65%</span>
+            <span className="absolute text-[10px] font-mono font-bold text-white">{storageStats.percentage}%</span>
           </div>
           <div>
             <span className="text-[9px] font-mono font-bold text-slate-500 block tracking-widest uppercase">LOCAL STORAGE</span>
-            <span className="text-xs font-mono font-bold text-white mt-0.5 block">128 GB / 256 GB</span>
+            <span className="text-xs font-mono font-bold text-white mt-0.5 block">{storageStats.usageStr} / {storageStats.quotaStr}</span>
           </div>
         </div>
       </div>

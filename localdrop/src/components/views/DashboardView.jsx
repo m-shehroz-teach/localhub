@@ -12,6 +12,7 @@ export default function DashboardView({
   isConnected,
   roomKey,
   deviceName,
+  peerDeviceName,
 }) {
   const [copied, setCopied] = useState(false);
   const [activeRightTab, setActiveRightTab] = useState('qr'); // 'qr' or 'key'
@@ -321,7 +322,9 @@ export default function DashboardView({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="text-sm font-bold text-white">iPhone 15 Pro</h4>
+                <h4 className="text-sm font-bold text-white">
+                  {isConnected ? (peerDeviceName || 'Connected Device') : 'No Connected Device'}
+                </h4>
                 {isConnected ? (
                   <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 ) : (

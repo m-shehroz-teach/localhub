@@ -4,7 +4,7 @@ import { encryptText, decryptText, encryptFileBuffer, decryptFileBuffer } from '
 
 const CHUNK_SIZE = 16384; // 16 KB chunks for optimal WebRTC buffer flow
 
-export function useWebRTC(roomKey) {
+export function useWebRTC(roomKey, localDeviceName) {
   const [isConnected, setIsConnected] = useState(false);
   const [activeTransfer, setActiveTransfer] = useState(null);
   const [filesHistory, setFilesHistory] = useState(() => {
@@ -17,6 +17,7 @@ export function useWebRTC(roomKey) {
   }, [filesHistory]);
 
   const [receivedText, setReceivedText] = useState('');
+  const [peerDeviceName, setPeerDeviceName] = useState('Peer Device');
 
   const pusherRef = useRef(null);
   const channelRef = useRef(null);
@@ -187,12 +188,16 @@ export function useWebRTC(roomKey) {
 
     channel.bind('pusher:subscription_succeeded', async () => {
       // Send join announcement
-      await sendSignalPayload({ type: 'JOIN' });
+      await sendSignalPayload({ type: 'JOIN', deviceName: localDeviceName });
     });
 
     channel.bind('client-signal', async (data) => {
       // Ignore messages sent by ourselves
       if (data.senderId === clientIdRef.current) return;
+
+      if (data.deviceName) {
+        setPeerDeviceName(data.deviceName);
+      }
 
       if (data.type === 'JOIN') {
         // First peer initiates the WebRTC offer
@@ -203,7 +208,7 @@ export function useWebRTC(roomKey) {
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
 
-        await sendSignalPayload({ sdp: pc.localDescription });
+        await sendSignalPayload({ sdp: pc.localDescription, deviceName: localDeviceName });
       } else if (data.sdp) {
         if (!pcRef.current) createPeerConnection();
         const pc = pcRef.current;
@@ -213,7 +218,7 @@ export function useWebRTC(roomKey) {
         if (data.sdp.type === 'offer') {
           const answer = await pc.createAnswer();
           await pc.setLocalDescription(answer);
-          await sendSignalPayload({ sdp: pc.localDescription });
+          await sendSignalPayload({ sdp: pc.localDescription, deviceName: localDeviceName });
         }
       } else if (data.candidate) {
         try {
@@ -239,7 +244,7 @@ export function useWebRTC(roomKey) {
         pcRef.current = null;
       }
     };
-  }, [roomKey, createPeerConnection]);
+  }, [roomKey, createPeerConnection, localDeviceName]);
 
   // Streaming File Sender Engine with End-to-End Encryption
   const sendFile = async (file) => {
@@ -361,6 +366,7 @@ export function useWebRTC(roomKey) {
     activeTransfer,
     filesHistory,
     receivedText,
+    peerDeviceName,
     sendFile,
     sendClipboard,
     setFilesHistory
