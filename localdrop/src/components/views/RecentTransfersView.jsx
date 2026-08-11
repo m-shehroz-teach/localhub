@@ -127,10 +127,11 @@ export default function RecentTransfersView({ filesHistory = [] }) {
       </div>
 
       {/* Transfers Data Grid/Table */}
+      {/* Transfers Data Grid/Table */}
       <div className="bg-[#0c0f1d] border border-[#1d263b]/50 rounded-3xl overflow-hidden pb-4">
         
         {/* Table Headings */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-[#1d263b]/40 text-[10px] font-mono font-bold text-slate-500 tracking-wider">
+        <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 border-b border-[#1d263b]/40 text-[10px] font-mono font-bold text-slate-500 tracking-wider">
           <div className="col-span-6">FILE DETAILS</div>
           <div className="col-span-2">SIZE</div>
           <div className="col-span-2">STATUS</div>
@@ -147,53 +148,57 @@ export default function RecentTransfersView({ filesHistory = [] }) {
             {filteredTransfers.map((item) => (
               <div 
                 key={item.id} 
-                className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-[#101426]/30 transition-colors"
+                className="flex flex-col md:grid md:grid-cols-12 gap-4 px-4 py-4 md:px-6 md:items-center hover:bg-[#101426]/30 transition-colors"
               >
                 
                 {/* File details column */}
-                <div className="col-span-6 flex items-center gap-4">
+                <div className="md:col-span-6 flex items-center gap-4 min-w-0">
                   {getFileIcon(item.name)}
-                  <div className="min-w-0">
-                    <h4 className="text-sm font-semibold text-white truncate max-w-xs">{item.name}</h4>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm font-semibold text-white truncate max-w-[280px] sm:max-w-md md:max-w-xs">{item.name}</h4>
                     <span className="text-[10px] font-mono text-slate-500 block mt-0.5">
                       {item.direction === 'Sent' ? 'To:' : 'From:'} {item.peer}
                     </span>
                   </div>
                 </div>
 
-                {/* Size column */}
-                <div className="col-span-2 text-sm font-semibold text-white font-mono">
-                  {item.size}
-                </div>
+                {/* Mobile Wrapper for Status, Size, Time */}
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 md:pt-0 border-t border-[#1d263b]/10 md:border-none md:col-span-6 md:grid md:grid-cols-6 md:gap-4">
+                  {/* Size column */}
+                  <div className="text-xs md:text-sm font-semibold text-white font-mono md:col-span-2">
+                    <span className="md:hidden text-slate-500 font-normal mr-1">Size:</span>
+                    {item.size}
+                  </div>
 
-                {/* Status Badge column */}
-                <div className="col-span-2">
-                  {item.status === 'Sent' && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#0d2a20] text-emerald-400 border border-emerald-500/10">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      Sent
-                    </span>
-                  )}
-                  {item.status === 'Received' && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#0d2a20] text-emerald-400 border border-emerald-500/10">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      Received
-                    </span>
-                  )}
-                  {item.status === 'Failed' && (
-                    <div className="space-y-1">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#2a1215] text-rose-400 border border-rose-500/10">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        Failed
+                  {/* Status Badge column */}
+                  <div className="md:col-span-2">
+                    {item.status === 'Sent' && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#0d2a20] text-emerald-400 border border-emerald-500/10">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Sent
                       </span>
-                      <span className="block text-[9px] font-mono text-amber-500 font-bold ml-1">Connection Lost</span>
-                    </div>
-                  )}
-                </div>
+                    )}
+                    {item.status === 'Received' && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#0d2a20] text-emerald-400 border border-emerald-500/10">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Received
+                      </span>
+                    )}
+                    {item.status === 'Failed' && (
+                      <div className="space-y-1">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#2a1215] text-rose-400 border border-rose-500/10">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          Failed
+                        </span>
+                        <span className="block text-[9px] font-mono text-amber-500 font-bold ml-1">Connection Lost</span>
+                      </div>
+                    )}
+                  </div>
 
-                {/* Date / Time column */}
-                <div className="col-span-2 text-xs font-mono text-slate-400">
-                  {item.datetime}
+                  {/* Date / Time column */}
+                  <div className="text-xs font-mono text-slate-400 md:col-span-2 text-right md:text-left">
+                    {item.datetime}
+                  </div>
                 </div>
 
               </div>

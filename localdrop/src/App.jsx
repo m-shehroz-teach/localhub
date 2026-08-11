@@ -29,6 +29,7 @@ function generateRoomKey() {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Live Device Name loaded from cookie, localStorage
   const [deviceName, setDeviceName] = useState(() => getDeviceName());
@@ -150,13 +151,27 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080b13] text-slate-100 flex font-sans antialiased">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen bg-[#080b13] text-slate-100 flex font-sans antialiased relative overflow-hidden">
+      {/* Mobile Sidebar Backdrop Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm transition-opacity duration-300"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
 
-      <div className="flex-1 flex flex-col min-w-0 p-8 overflow-y-auto h-screen">
+      <Sidebar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        isSidebarOpen={isSidebarOpen}
+        onCloseSidebar={() => setIsSidebarOpen(false)}
+      />
+
+      <div className="flex-1 flex flex-col min-w-0 p-4 sm:p-8 overflow-y-auto h-screen">
         <HeaderBar
           isConnected={isConnected}
           deviceName={deviceName}
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         />
 
         <div className="flex-1 mt-2">

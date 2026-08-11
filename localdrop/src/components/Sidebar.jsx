@@ -1,7 +1,7 @@
 import React from 'react';
-import { LayoutDashboard, Clock, ClipboardList, Settings } from 'lucide-react';
+import { LayoutDashboard, Clock, ClipboardList, Settings, X } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab }) {
+export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, onCloseSidebar }) {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'recent', label: 'Recent Transfers', icon: Clock },
@@ -9,20 +9,40 @@ export default function Sidebar({ activeTab, setActiveTab }) {
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+    if (onCloseSidebar) {
+      onCloseSidebar();
+    }
+  };
+
   return (
-    <aside className="w-64 bg-[#090c15] border-r border-[#161c2e]/60 flex flex-col justify-between p-6 flex-shrink-0">
+    <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#090c15] border-r border-[#161c2e]/60 flex flex-col justify-between p-6 flex-shrink-0 transform transition-transform duration-300 ease-in-out md:static md:translate-x-0 ${
+      isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+    }`}>
       <div className="space-y-8">
         {/* Brand Header */}
-        <div className="flex items-center gap-3 px-2 mt-2">
-          {/* Logo container */}
-          <div className="w-8 h-8 rounded-lg bg-[#0e172a] border border-[#1e293b] flex items-center justify-center relative overflow-hidden">
-            {/* Custom abstract icon representing LocalDrop P2P */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-[#3b2eb5]/30 to-[#7b80ff]/30 opacity-50"></div>
-            <svg className="w-4 h-4 text-[#7b80ff] z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
+        <div className="flex items-center justify-between px-2 mt-2">
+          <div className="flex items-center gap-3">
+            {/* Logo container */}
+            <div className="w-8 h-8 rounded-lg bg-[#0e172a] border border-[#1e293b] flex items-center justify-center relative overflow-hidden">
+              {/* Custom abstract icon representing LocalDrop P2P */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#3b2eb5]/30 to-[#7b80ff]/30 opacity-50"></div>
+              <svg className="w-4 h-4 text-[#7b80ff] z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              </svg>
+            </div>
+            <span className="text-xl font-bold tracking-tight text-white">LocalDrop</span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">LocalDrop</span>
+
+          {/* Close button for mobile */}
+          <button
+            onClick={onCloseSidebar}
+            className="md:hidden p-1.5 rounded-lg hover:bg-[#161c2e]/50 text-[#94a3b8] hover:text-white transition-colors"
+            aria-label="Close menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Navigation Items */}
@@ -33,7 +53,7 @@ export default function Sidebar({ activeTab, setActiveTab }) {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleTabClick(item.id)}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-150 ${
                   isActive
                     ? 'bg-[#7b80ff] text-[#241e78] font-bold shadow-lg shadow-[#7b80ff]/10'
