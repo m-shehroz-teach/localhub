@@ -19,20 +19,16 @@ export default function RecentTransfersView({ filesHistory = [] }) {
         const usageBytes = estimate.usage || 0;
         const quotaBytes = estimate.quota || 0;
         
-        const formatBytes = (bytes) => {
-          if (bytes === 0) return '0 B';
-          const k = 1024;
-          const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-          const i = Math.floor(Math.log(bytes) / Math.log(k));
-          return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-        };
+        // Convert explicitly to GB with 2 decimal places
+        const usageGB = (usageBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+        const quotaGB = (quotaBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
 
         const pct = quotaBytes > 0 ? Math.round((usageBytes / quotaBytes) * 100) : 0;
         
         setStorageStats({
           percentage: pct,
-          usageStr: formatBytes(usageBytes),
-          quotaStr: formatBytes(quotaBytes)
+          usageStr: usageGB,
+          quotaStr: quotaGB
         });
       });
     }
