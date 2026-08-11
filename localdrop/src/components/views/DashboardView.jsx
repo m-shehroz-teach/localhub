@@ -109,38 +109,45 @@ export default function DashboardView({
 
         {/* Active Transfer Progress Container */}
         {activeTransfer && (
-          <div className="bg-[#0c0f1d] border border-[#1d263b]/60 rounded-3xl p-6 relative">
-            <button className="absolute top-4 right-4 text-slate-500 hover:text-slate-300">
+          <div className="bg-[#121625] border border-[#242f4c]/80 rounded-3xl p-6 relative shadow-xl shadow-black/10">
+            {/* Cancel Button */}
+            <button className="absolute top-6 right-6 w-8 h-8 rounded-full bg-[#1c2237]/80 hover:bg-[#252f4c] text-slate-400 hover:text-white flex items-center justify-center border border-[#2e3b5e]/40 transition-colors">
               <X className="w-4 h-4" />
             </button>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-start gap-4">
+              {/* File Icon */}
               {getFileIcon(activeTransfer.fileName)}
+              
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h4 className="text-sm font-semibold text-white truncate max-w-md">{activeTransfer.fileName}</h4>
-                  <span className="text-[10px] bg-[#1a2035] text-slate-300 font-mono px-2 py-0.5 rounded border border-[#2e3b5e]/40">
+                {/* Title */}
+                <h4 className="text-base font-bold text-white truncate pr-10 tracking-tight">{activeTransfer.fileName}</h4>
+                
+                {/* Size & Speed Badges */}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-xs bg-[#0c0f1d] text-slate-300 font-mono px-3 py-1 rounded-xl border border-[#242f4c]/60">
                     {activeTransfer.fileSize}
                   </span>
-                  <span className="text-[10px] bg-[#162a35] text-[#3dd1ff] font-mono px-2 py-0.5 rounded border border-[#1b3d4f]/40 flex items-center gap-1">
-                    <span className="w-1 h-1 rounded-full bg-[#3dd1ff]"></span>
+                  <span className="text-xs bg-[#161c35] text-[#7b80ff] font-mono px-3 py-1 rounded-xl border border-[#7b80ff]/20 flex items-center gap-1.5 font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#7b80ff]"></span>
                     {activeTransfer.speed || '0 MB/s'}
                   </span>
                 </div>
-                
-                <div className="flex justify-between text-xs text-slate-400 mt-3 font-medium">
-                  <span>{activeTransfer.progress}% completed</span>
-                  <span>{activeTransfer.timeRemaining || '2s remaining'}</span>
-                </div>
-                
-                {/* Custom Gradient Progress Bar */}
-                <div className="w-full bg-[#161d30] rounded-full h-2 mt-2 overflow-hidden border border-[#242f4c]/30">
-                  <div
-                    className="bg-gradient-to-r from-[#7b80ff] to-[#3df5c2] h-full transition-all duration-300 rounded-full"
-                    style={{ width: `${activeTransfer.progress}%` }}
-                  ></div>
-                </div>
               </div>
+            </div>
+
+            {/* Completion Percentage & Time Remaining */}
+            <div className="flex justify-between text-xs font-mono text-slate-400 mt-4 font-semibold">
+              <span>{activeTransfer.progress}% completed</span>
+              <span>{activeTransfer.timeRemaining || 'Calculating...'}</span>
+            </div>
+            
+            {/* Custom Gradient Progress Bar */}
+            <div className="w-full bg-[#080b13] rounded-full h-2 mt-2 overflow-hidden border border-[#242f4c]/30">
+              <div
+                className="bg-gradient-to-r from-[#7b80ff] to-[#3df5c2] h-full transition-all duration-300 rounded-full"
+                style={{ width: `${activeTransfer.progress}%` }}
+              ></div>
             </div>
           </div>
         )}
