@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import Pusher from 'pusher-js';
 import { encryptText, decryptText, encryptFileBuffer, decryptFileBuffer } from '../utils/encryption';
 
-const CHUNK_SIZE = 65536; // 64 KB chunks for optimal WebRTC buffer flow
+const CHUNK_SIZE = 262144; // 256 KB chunks for optimal WebRTC buffer flow
 
 export function useWebRTC(roomKey, localDeviceName) {
   const [isConnected, setIsConnected] = useState(false);
@@ -328,7 +328,7 @@ export function useWebRTC(roomKey, localDeviceName) {
       direction: 'sending'
     });
 
-    dc.bufferedAmountLowThreshold = 524288; // 512 KB
+    dc.bufferedAmountLowThreshold = 8388608; // 8 MB low threshold to keep the pipeline full
 
     const sendNextChunks = () => {
       while (offset < encryptedBuffer.byteLength) {
@@ -337,13 +337,15 @@ export function useWebRTC(roomKey, localDeviceName) {
           return;
         }
 
-        if (dc.bufferedAmount > 1048576) { // 1 MB
+        if (dc.bufferedAmount > 16777216) { // 16 MB maximum buffer limit
           return;
         }
 
-        const chunk = encryptedBuffer.slice(offset, offset + CHUNK_SIZE);
+        // Use zero-copy Uint8Array view instead of slicing the ArrayBuffer
+        const chunkSize = Math.min(CHUNK_SIZE, encryptedBuffer.byteLength - offset);
+        const chunk = new Uint8Array(encryptedBuffer, offset, chunkSize);
         dc.send(chunk);
-        offset += chunk.byteLength;
+        offset += chunkSize;
 
         const now = performance.now();
         const duration = (now - lastTime) / 1000;
