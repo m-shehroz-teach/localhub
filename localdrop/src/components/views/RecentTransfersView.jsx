@@ -14,25 +14,33 @@ export default function RecentTransfersView({ filesHistory = [] }) {
   });
 
   useEffect(() => {
-    if (navigator.storage && navigator.storage.estimate) {
-      navigator.storage.estimate().then((estimate) => {
-        const usageBytes = estimate.usage || 0;
-        const quotaBytes = estimate.quota || 0;
-        
-        // Convert explicitly to GB with 2 decimal places
-        const usageGB = (usageBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
-        const quotaGB = (quotaBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+    const updateStorage = () => {
+      if (navigator.storage && navigator.storage.estimate) {
+        navigator.storage.estimate().then((estimate) => {
+          const usageBytes = estimate.usage || 0;
+          const quotaBytes = estimate.quota || 0;
+          
+          // Convert explicitly to GB with 2 decimal places
+          const usageGB = (usageBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+          const quotaGB = (quotaBytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
 
-        const pct = quotaBytes > 0 ? Math.round((usageBytes / quotaBytes) * 100) : 0;
-        
-        setStorageStats({
-          percentage: pct,
-          usageStr: usageGB,
-          quotaStr: quotaGB
+          const pct = quotaBytes > 0 ? Math.round((usageBytes / quotaBytes) * 100) : 0;
+          
+          setStorageStats({
+            percentage: pct,
+            usageStr: usageGB,
+            quotaStr: quotaGB
+          });
         });
-      });
-    }
-  }, []);
+      }
+    };
+
+    updateStorage();
+
+    // Poll every 3 seconds for live updates and update when filesHistory updates
+    const intervalId = setInterval(updateStorage, 3000);
+    return () => clearInterval(intervalId);
+  }, [filesHistory]);
 
   const mapHistoryItem = (item) => {
     return {
