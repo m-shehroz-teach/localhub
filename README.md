@@ -9,7 +9,7 @@ external servers.
 ## 📸 Preview
 
 <p align="center">
-  <img src="./LocalHub.png" alt="LocalHub Preview" width="100%">
+  <img src="./public/LocalHub.png" alt="LocalHub Preview" width="100%">
 </p>
 
 ## ✨ Features
