@@ -55,7 +55,7 @@ external servers.
 ## 📂 Project Structure
 
 ``` text
-localhub/
+localhub/                      #Made By Muhammad Shehroz
 ├── api/
 │   └── signal.js             # Vercel Serverless Function for Pusher signaling
 ├── public/
@@ -80,7 +80,7 @@ localhub/
 ### 1. Clone the repository
 
 ``` bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/localhub.git
+git clone https://github.com/m-shehroz-teach/localhub
 ```
 
 ### 2. Navigate to the project directory
@@ -139,7 +139,7 @@ servers or paid backends.
 
 **Shehroz**
 
--   GitHub: [m-shehroz-teach/]((https://github.com/m-shehroz-teach)
+-   GitHub: [m-shehroz-teach/](https://github.com/m-shehroz-teach)
 -   Live Demo:
     [localhub-ten.vercel.app](https://localhub-ten.vercel.app/)
--   LinkedIn: Muhammad Shehroz
+-   LinkedIn: [jammuhammadshehroz/](www.linkedin.com/in/jammuhammadshehroz)
