@@ -8,6 +8,7 @@
   --border-card: rgba(30, 41, 59, 0.7);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
+  --text-textarea: #3df5c2;
 }
 
 [data-theme="light"] {
@@ -18,6 +19,7 @@
   --border-card: rgba(148, 163, 184, 0.4);
   --text-main: #000000; /* highest contrast black */
   --text-muted: #0f172a; /* highest contrast charcoal */
+  --text-textarea: #0f766e; /* deep teal for readability */
 }
 
 @theme {
@@ -137,4 +139,7 @@
 }
 .hover\:text-slate-300:hover {
   color: var(--text-main) !important;
+}
+.text-\[\#3df5c2\] {
+  color: var(--text-textarea) !important;
 }
