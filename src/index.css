@@ -167,3 +167,19 @@
 .text-\[\#3df5c2\] {
   color: var(--text-textarea) !important;
 }
+
+/* Custom YouTube-Style Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #0f172a 25%, #1e293b 50%, #0f172a 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
