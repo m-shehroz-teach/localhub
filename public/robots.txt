@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://localhub-p2p.vercel.app/sitemap.xml
+Sitemap: https://localhub-ten.vercel.app/sitemap.xml
