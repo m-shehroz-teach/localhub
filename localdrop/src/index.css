@@ -16,8 +16,8 @@
   --bg-card: #ffffff; /* pure white cards */
   --bg-card-inner: #f8fafc; /* light silver inner card */
   --border-card: rgba(148, 163, 184, 0.4);
-  --text-main: #0f172a;
-  --text-muted: #475569;
+  --text-main: #000000; /* highest contrast black */
+  --text-muted: #0f172a; /* highest contrast charcoal */
 }
 
 @theme {
