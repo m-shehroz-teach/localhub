@@ -4,6 +4,7 @@ import {
   Upload, Copy, Check, ArrowUpRight, ArrowDownLeft, 
   FileText, QrCode, X, Laptop, Smartphone, Link
 } from 'lucide-react';
+import FaqSection from './FaqSection';
 
 export default function DashboardView({
   activeTransfer,
@@ -78,7 +79,8 @@ export default function DashboardView({
   const displayHistory = filesHistory;
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start pb-6">
+    <div className="space-y-6 pb-12">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
       
       {/* LEFT COLUMN: Main dropzone, active transfers, shared history */}
       <div className="xl:col-span-2 space-y-6">
@@ -86,10 +88,10 @@ export default function DashboardView({
         {/* Value Proposition Hero */}
         <div className="p-1">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Beam Files Instantly. <span className="text-primary">No Cloud. No Limits.</span>
+            Need to send a large video from your phone to your computer?
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed max-w-2xl">
-            Drop photos, videos, and documents directly between nearby screens using your local network. Experience gigabit-rate local streaming without using a single byte of external internet bandwidth.
+            LocalHub makes it instant. Share photos, videos, and files directly between any devices—like your iPhone, Windows PC, Android, or Mac—with no app installs, no signups, and zero limits.
           </p>
         </div>
 
@@ -365,11 +367,59 @@ export default function DashboardView({
             <div className="flex justify-between">
               <span className="text-slate-500">Local Subnet</span>
               <span className="text-white font-semibold">192.168.1.42</span>
-            </div>
-          </div>
-        </div>
-
       </div>
+    </div>
+  </div>
+</div>
+</div>
+
+      {/* Value Cards Section */}
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-[#0c0f1d] border border-border-card rounded-3xl p-6 space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
+            <Smartphone className="w-6 h-6" />
+          </div>
+          <h3 className="text-lg font-bold text-white">No Apps or Signups Needed</h3>
+          <p className="text-sm text-slate-400 leading-relaxed">
+            Works instantly in any modern web browser. No accounts to create, no email verification, and no software to download.
+          </p>
+        </div>
+        <div className="bg-[#0c0f1d] border border-border-card rounded-3xl p-6 space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
+            <Upload className="w-6 h-6" />
+          </div>
+          <h3 className="text-lg font-bold text-white">No File Size Limits</h3>
+          <p className="text-sm text-slate-400 leading-relaxed">
+            Send massive videos, heavy zip archives, or complete photo albums directly. Since files stream live, size is never a restriction.
+          </p>
+        </div>
+        <div className="bg-[#0c0f1d] border border-border-card rounded-3xl p-6 space-y-3">
+          <div className="w-12 h-12 rounded-2xl bg-primary-light text-primary flex items-center justify-center">
+            <Check className="w-6 h-6" />
+          </div>
+          <h3 className="text-lg font-bold text-white">100% Private</h3>
+          <p className="text-sm text-slate-400 leading-relaxed">
+            Your payloads transfer directly device-to-device. Your files are never uploaded or stored on any intermediate internet servers.
+          </p>
+        </div>
+      </div>
+
+      {/* CTA Banner */}
+      <div className="mt-12 p-8 rounded-3xl bg-primary-light border border-primary-border flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        <div>
+          <h4 className="text-lg font-bold text-white">Ready to share some files?</h4>
+          <p className="text-sm text-slate-400 mt-1">Scan the QR code or share your unique Room Key above to pair devices and begin transferring.</p>
+        </div>
+        <button 
+          onClick={handleCopyLink}
+          className="px-6 py-3 rounded-full bg-primary hover:bg-primary-hover text-primary-text text-sm font-bold transition-all shadow-md shadow-primary/10 shrink-0"
+        >
+          {copied ? 'Link Copied!' : 'Copy Room Link'}
+        </button>
+      </div>
+
+      {/* FAQ Section */}
+      <FaqSection />
 
     </div>
   );
