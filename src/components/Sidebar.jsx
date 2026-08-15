@@ -32,7 +32,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, onClos
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
             </div>
-            <span className="text-xl font-bold tracking-tight text-text-main">LocalDrop</span>
+            <h1 className="text-xl font-bold tracking-tight text-text-main">LocalHub</h1>
           </div>
 
           {/* Close button for mobile */}
@@ -70,7 +70,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, onClos
 
       {/* Footer Branding */}
       <div className="px-2 font-mono text-[10px] text-text-muted space-y-1 mt-auto">
-        <p className="text-text-muted font-medium">Powered by LocalDrop P2P</p>
+        <p className="text-text-muted font-medium">Powered by LocalHub P2P</p>
         <p className="text-[10px] text-text-muted/80">v1.2.4</p>
       </div>
     </aside>

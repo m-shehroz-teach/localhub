@@ -83,6 +83,16 @@ export default function DashboardView({
       {/* LEFT COLUMN: Main dropzone, active transfers, shared history */}
       <div className="xl:col-span-2 space-y-6">
         
+        {/* Value Proposition Hero */}
+        <div className="p-1">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Beam Files Instantly. <span className="text-primary">No Cloud. No Limits.</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed max-w-2xl">
+            Drop photos, videos, and documents directly between nearby screens using your local network. Experience gigabit-rate local streaming without using a single byte of external internet bandwidth.
+          </p>
+        </div>
+
         {/* File Drag and Drop Zone */}
         <div className="bg-[#0c0f1d] border border-[#1d263b]/50 rounded-3xl p-6 relative">
           <div className="border border-dashed border-[#242f4c] hover:border-primary/50 rounded-2xl p-12 transition-all bg-[#080b13]/40 flex flex-col items-center justify-center relative min-h-[300px]">
