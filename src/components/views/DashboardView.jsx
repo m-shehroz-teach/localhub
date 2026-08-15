@@ -85,7 +85,7 @@ export default function DashboardView({
         
         {/* File Drag and Drop Zone */}
         <div className="bg-[#0c0f1d] border border-[#1d263b]/50 rounded-3xl p-6 relative">
-          <div className="border border-dashed border-[#242f4c] hover:border-[#7b80ff]/50 rounded-2xl p-12 transition-all bg-[#080b13]/40 flex flex-col items-center justify-center relative min-h-[300px]">
+          <div className="border border-dashed border-[#242f4c] hover:border-primary/50 rounded-2xl p-12 transition-all bg-[#080b13]/40 flex flex-col items-center justify-center relative min-h-[300px]">
             <input
               type="file"
               onChange={(e) => onFilesSelected(e.target.files)}
@@ -102,7 +102,7 @@ export default function DashboardView({
             <h3 className="text-xl font-bold text-white tracking-tight">Drag & drop files here</h3>
             <p className="text-sm text-slate-400 mt-2">or click to browse from device</p>
             
-            <button className="mt-6 px-6 py-2.5 rounded-full bg-[#7b80ff] hover:bg-[#6c71f0] text-[#1a1754] text-xs font-bold transition-all shadow-md shadow-[#7b80ff]/10">
+            <button className="mt-6 px-6 py-2.5 rounded-full bg-primary hover:bg-primary-hover text-primary-text text-xs font-bold transition-all shadow-md shadow-primary/10">
               Select Files
             </button>
           </div>
@@ -131,8 +131,8 @@ export default function DashboardView({
                   <span className="text-xs bg-[#0c0f1d] text-slate-300 font-mono px-3 py-1 rounded-xl border border-[#242f4c]/60">
                     {activeTransfer.fileSize}
                   </span>
-                  <span className="text-xs bg-[#161c35] text-[#7b80ff] font-mono px-3 py-1 rounded-xl border border-[#7b80ff]/20 flex items-center gap-1.5 font-bold">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#7b80ff]"></span>
+                  <span className="text-xs bg-primary-light text-primary font-mono px-3 py-1 rounded-xl border border-primary-border flex items-center gap-1.5 font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
                     {activeTransfer.speed || '0 MB/s'}
                   </span>
                 </div>
@@ -148,7 +148,7 @@ export default function DashboardView({
             {/* Custom Gradient Progress Bar */}
             <div className="w-full bg-[#080b13] rounded-full h-2 mt-2 overflow-hidden border border-[#242f4c]/30">
               <div
-                className="bg-gradient-to-r from-[#7b80ff] to-[#3df5c2] h-full transition-all duration-300 rounded-full"
+                className="bg-gradient-to-r from-primary to-[#3df5c2] h-full transition-all duration-300 rounded-full"
                 style={{ width: `${activeTransfer.progress}%` }}
               ></div>
             </div>
@@ -214,7 +214,7 @@ export default function DashboardView({
               onClick={() => setActiveRightTab('qr')}
               className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition-all ${
                 activeRightTab === 'qr' 
-                  ? 'bg-[#7b80ff]/15 text-[#7b80ff] border border-[#7b80ff]/20' 
+                  ? 'bg-primary-light text-primary border border-primary-border' 
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -225,7 +225,7 @@ export default function DashboardView({
               onClick={() => setActiveRightTab('key')}
               className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-semibold transition-all ${
                 activeRightTab === 'key' 
-                  ? 'bg-[#7b80ff]/15 text-[#7b80ff] border border-[#7b80ff]/20' 
+                  ? 'bg-primary-light text-primary border border-primary-border' 
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -258,7 +258,7 @@ export default function DashboardView({
             ) : (
               <div className="w-full space-y-4 px-2 py-4 text-center">
                 <div className="bg-[#080b13] border border-[#242f4c] py-4 rounded-2xl">
-                  <span className="font-mono text-xl font-bold tracking-widest text-[#7b80ff]">{roomKey}</span>
+                  <span className="font-mono text-xl font-bold tracking-widest text-primary">{roomKey}</span>
                 </div>
                 <p className="text-xs text-slate-400 leading-relaxed max-w-[220px] mx-auto">
                   Enter this room key on your peer's browser to pair instantly.
@@ -269,7 +269,7 @@ export default function DashboardView({
 
           <button 
             onClick={handleCopyLink}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-[#2e3b5e]/80 hover:bg-[#182035] text-slate-300 hover:text-white text-xs font-semibold transition-all"
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-border-card hover:bg-bg-card-inner text-text-muted hover:text-text-main text-xs font-semibold transition-all"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Link className="w-3.5 h-3.5" />}
             {copied ? 'Link Copied!' : 'Copy Share Link'}
@@ -294,7 +294,7 @@ export default function DashboardView({
               value={clipboardInput}
               onChange={(e) => setClipboardInput(e.target.value)}
               placeholder="Paste text or links here to sync..."
-              className="w-full bg-[#080b13] border border-[#202941] rounded-2xl p-4 text-xs font-mono text-slate-300 placeholder-slate-600 focus:outline-none focus:border-[#7b80ff]/50 resize-none leading-relaxed pr-8"
+              className="w-full bg-[#080b13] border border-[#202941] rounded-2xl p-4 text-xs font-mono text-slate-300 placeholder-slate-600 focus:outline-none focus:border-primary/50 resize-none leading-relaxed pr-8"
             />
             {/* Double green status dots at bottom-right of text container */}
             <div className="absolute bottom-4 right-4 flex gap-1 items-center">
@@ -311,13 +311,13 @@ export default function DashboardView({
                   navigator.clipboard.writeText(clipboardInput);
                 }
               }}
-              className="flex-1 bg-[#1a2235] hover:bg-[#252f4c] text-white border border-[#2e3b5e]/40 py-2.5 rounded-xl text-xs font-semibold transition-colors"
+              className="flex-1 bg-primary hover:bg-primary-hover text-primary-text py-2.5 rounded-xl text-xs font-semibold transition-colors"
             >
               Sync to Peer
             </button>
             <button 
               onClick={handleCopyClipboardInput}
-              className="flex-1 border border-[#2e3b5e]/80 hover:bg-[#1a2235] text-slate-300 py-2.5 rounded-xl text-xs font-semibold transition-colors"
+              className="flex-1 border border-border-card hover:bg-bg-card-inner text-text-muted hover:text-text-main py-2.5 rounded-xl text-xs font-semibold transition-colors"
             >
               {clipboardCopied ? 'Copied!' : 'Copy'}
             </button>

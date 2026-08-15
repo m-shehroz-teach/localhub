@@ -131,7 +131,7 @@ export default function RecentTransfersView({ filesHistory = [] }) {
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
               <path
-                className="text-[#7b80ff]"
+                className="text-primary"
                 strokeWidth="3.5"
                 strokeDasharray={`${storageStats.percentage}, 100`}
                 strokeLinecap="round"
@@ -176,22 +176,22 @@ export default function RecentTransfersView({ filesHistory = [] }) {
           {showTypeDropdown && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setShowTypeDropdown(false)} />
-              <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-[#0c0f1d] border border-[#1d263b] shadow-xl z-20 overflow-hidden py-1">
+              <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-[#0c0f1d] border border-border-card shadow-xl z-20 overflow-hidden py-1">
                 <button 
                   onClick={() => { setFilterType('all'); setShowTypeDropdown(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterType === 'all' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-bg-card-inner transition-colors ${filterType === 'all' ? 'text-primary font-bold' : 'text-slate-300'}`}
                 >
                   All Transfers
                 </button>
                 <button 
                   onClick={() => { setFilterType('sent'); setShowTypeDropdown(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterType === 'sent' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-bg-card-inner transition-colors ${filterType === 'sent' ? 'text-primary font-bold' : 'text-slate-300'}`}
                 >
                   Sent Only
                 </button>
                 <button 
                   onClick={() => { setFilterType('received'); setShowTypeDropdown(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterType === 'received' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-bg-card-inner transition-colors ${filterType === 'received' ? 'text-primary font-bold' : 'text-slate-300'}`}
                 >
                   Received Only
                 </button>
@@ -213,22 +213,22 @@ export default function RecentTransfersView({ filesHistory = [] }) {
           {showDateDropdown && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setShowDateDropdown(false)} />
-              <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-[#0c0f1d] border border-[#1d263b] shadow-xl z-20 overflow-hidden py-1">
+              <div className="absolute left-0 mt-2 w-48 rounded-2xl bg-[#0c0f1d] border border-border-card shadow-xl z-20 overflow-hidden py-1">
                 <button 
                   onClick={() => { setFilterDate('all'); setShowDateDropdown(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterDate === 'all' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-bg-card-inner transition-colors ${filterDate === 'all' ? 'text-primary font-bold' : 'text-slate-300'}`}
                 >
                   All Time
                 </button>
                 <button 
                   onClick={() => { setFilterDate('today'); setShowDateDropdown(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterDate === 'today' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-bg-card-inner transition-colors ${filterDate === 'today' ? 'text-primary font-bold' : 'text-slate-300'}`}
                 >
                   Today
                 </button>
                 <button 
                   onClick={() => { setFilterDate('yesterday'); setShowDateDropdown(false); }}
-                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-[#161c32] transition-colors ${filterDate === 'yesterday' ? 'text-[#7b80ff] font-bold' : 'text-slate-300'}`}
+                  className={`w-full text-left px-4 py-2.5 text-xs hover:bg-bg-card-inner transition-colors ${filterDate === 'yesterday' ? 'text-primary font-bold' : 'text-slate-300'}`}
                 >
                   Yesterday
                 </button>
@@ -324,7 +324,7 @@ export default function RecentTransfersView({ filesHistory = [] }) {
 
       {/* Load More Button */}
       <div className="flex justify-center pt-2">
-        <button className="px-6 py-2.5 rounded-full bg-[#1b2237] hover:bg-[#252f4c] text-xs font-mono font-bold text-slate-300 hover:text-white transition-all border border-[#2e3b5e]/40 uppercase tracking-wider">
+        <button className="px-6 py-2.5 rounded-full bg-bg-card-inner hover:bg-primary-light hover:text-primary transition-all border border-border-card text-xs font-bold uppercase tracking-wider">
           Load More History
         </button>
       </div>

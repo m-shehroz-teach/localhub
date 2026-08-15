@@ -57,7 +57,7 @@ export default function SharedClipboardView({
 
         <button
           onClick={onClearHistory}
-          className="px-4 py-2.5 rounded-xl bg-[#0c0f1d] border border-[#1d263b]/80 hover:bg-rose-950/20 hover:border-rose-800/40 hover:text-rose-400 text-slate-400 text-xs font-semibold flex items-center gap-2 transition-colors self-start"
+          className="px-4 py-2.5 rounded-xl bg-[#0c0f1d] border border-border-card hover:bg-rose-950/20 hover:border-rose-800/40 hover:text-rose-400 text-slate-400 text-xs font-semibold flex items-center gap-2 transition-colors self-start"
         >
           <Trash2 className="w-3.5 h-3.5" /> 
           Clear History
@@ -84,7 +84,7 @@ export default function SharedClipboardView({
               {/* Switches Container */}
               <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                 
-                {/* Auto Sync Toggle */}
+                 {/* Auto Sync Toggle */}
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <span className="text-xs text-slate-400 font-semibold">Auto-sync</span>
                   <div className="relative">
@@ -94,12 +94,12 @@ export default function SharedClipboardView({
                       onChange={() => setAutoSync(!autoSync)} 
                       className="sr-only" 
                     />
-                    <div className={`w-9 h-5 rounded-full transition-colors ${autoSync ? 'bg-[#3df5c2]/20 border border-[#3df5c2]/30' : 'bg-[#181f33] border border-[#2d3a5a]'}`}></div>
-                    <div className={`absolute top-1 left-1 w-3 h-3 rounded-full transition-transform ${autoSync ? 'translate-x-4 bg-[#3df5c2]' : 'bg-slate-500'}`}></div>
+                    <div className={`w-9 h-5 rounded-full transition-colors ${autoSync ? 'bg-[var(--text-textarea)]/20 border border-[var(--text-textarea)]/30' : 'bg-bg-app border border-border-card'}`}></div>
+                    <div className={`absolute top-1 left-1 w-3 h-3 rounded-full transition-transform ${autoSync ? 'translate-x-4 bg-[var(--text-textarea)]' : 'bg-slate-500'}`}></div>
                   </div>
                 </label>
-
-                {/* Sensitive Mode Toggle */}
+ 
+                 {/* Sensitive Mode Toggle */}
                 <label className="flex items-center gap-2.5 cursor-pointer select-none">
                   <span className="text-xs text-slate-400 font-semibold">Sensitive Mode</span>
                   <div className="relative">
@@ -109,13 +109,13 @@ export default function SharedClipboardView({
                       onChange={() => setSensitiveMode(!sensitiveMode)} 
                       className="sr-only" 
                     />
-                    <div className={`w-9 h-5 rounded-full transition-colors ${sensitiveMode ? 'bg-[#7b80ff]/20 border border-[#7b80ff]/30' : 'bg-[#181f33] border border-[#2d3a5a]'}`}></div>
-                    <div className={`absolute top-1 left-1 w-3 h-3 rounded-full transition-transform ${sensitiveMode ? 'translate-x-4 bg-[#7b80ff]' : 'bg-slate-500'}`}></div>
+                    <div className={`w-9 h-5 rounded-full transition-colors ${sensitiveMode ? 'bg-primary-light border border-primary-border' : 'bg-bg-app border border-border-card'}`}></div>
+                    <div className={`absolute top-1 left-1 w-3 h-3 rounded-full transition-transform ${sensitiveMode ? 'translate-x-4 bg-primary' : 'bg-slate-500'}`}></div>
                   </div>
                 </label>
-
-                {/* Code icon */}
-                <div className="p-1.5 bg-[#172035] rounded-lg border border-[#2e3b5e]/40 text-[#7b80ff]">
+ 
+                 {/* Code icon */}
+                <div className="p-1.5 bg-primary-light rounded-lg border border-primary-border text-primary">
                   <Code2 className="w-3.5 h-3.5" />
                 </div>
 
@@ -129,24 +129,24 @@ export default function SharedClipboardView({
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
                 placeholder="Paste or write text to broadcast live..."
-                className="w-full bg-[#080b13] border border-[#1e273f] rounded-2xl p-5 text-xs font-mono text-[#3df5c2] placeholder-slate-600 focus:outline-none focus:border-[#7b80ff]/40 resize-none leading-relaxed"
+                className="w-full bg-[#080b13] border border-border-card rounded-2xl p-5 text-xs font-mono text-text-textarea placeholder-slate-600 focus:outline-none focus:border-primary/40 resize-none leading-relaxed"
               />
             </div>
 
             {/* Bottom Editor Info Bar */}
             <div className="flex items-center justify-between pt-2">
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-mono font-bold text-slate-400 bg-[#161d2f] border border-[#2e3b5e]/40 px-3 py-1.5 rounded-lg">
+                <span className="text-[10px] font-mono font-bold text-text-muted bg-bg-card-inner border border-border-card px-3 py-1.5 rounded-lg">
                   {textInput.length} CHARS
                 </span>
-                <span className="text-[10px] font-mono font-bold text-[#7b80ff] bg-[#1a1738] border border-[#7b80ff]/20 px-3 py-1.5 rounded-lg">
+                <span className="text-[10px] font-mono font-bold text-primary bg-primary-light border border-primary-border px-3 py-1.5 rounded-lg">
                   {getLanguage(textInput)}
                 </span>
               </div>
 
               <button
                 onClick={handleSync}
-                className="px-6 py-2.5 rounded-xl bg-[#7b80ff] hover:bg-[#6c71f0] text-[#1a1754] text-xs font-bold transition-all shadow-md shadow-[#7b80ff]/10 flex items-center gap-2"
+                className="px-6 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-primary-text text-xs font-bold transition-all shadow-md shadow-primary/10 flex items-center gap-2"
               >
                 <svg className={`w-3.5 h-3.5 ${syncedStatus ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 7.89M9 11l3-3 3 3m-3-3v12" />
@@ -211,7 +211,7 @@ export default function SharedClipboardView({
                   </span>
                   <button
                     onClick={() => handleCopy(item.content)}
-                    className="text-[10px] text-[#7b80ff] hover:underline flex items-center gap-1 font-semibold"
+                    className="text-[10px] text-primary hover:underline flex items-center gap-1 font-semibold"
                   >
                     <Copy className="w-3 h-3" /> 
                     Copy

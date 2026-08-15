@@ -65,7 +65,7 @@ export default function SettingsView({ deviceName, onSaveDeviceName }) {
       <div className="bg-bg-card border border-border-card rounded-3xl p-6 space-y-6">
         
         <div className="flex items-center gap-2.5 pb-2 border-b border-border-card">
-          <Sliders className="w-4 h-4 text-[#7b80ff]" />
+          <Sliders className="w-4 h-4 text-primary" />
           <h3 className="text-base font-bold text-text-main">General</h3>
         </div>
 
@@ -82,7 +82,7 @@ export default function SettingsView({ deviceName, onSaveDeviceName }) {
               type="text"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
-              className="w-full bg-bg-app border border-border-card rounded-2xl px-4 py-3.5 text-sm font-semibold text-text-main focus:outline-none focus:border-[#7b80ff]/40"
+              className="w-full bg-bg-app border border-border-card rounded-2xl px-4 py-3.5 text-sm font-semibold text-text-main focus:outline-none focus:border-primary/40"
               placeholder="e.g. MacBook Pro"
             />
           </div>
@@ -98,7 +98,7 @@ export default function SettingsView({ deviceName, onSaveDeviceName }) {
             </button>
             <button 
               type="submit"
-              className="px-6 py-3 rounded-2xl bg-[#7b80ff] hover:bg-[#6c71f0] text-white text-xs font-bold transition-all shadow-md shadow-[#7b80ff]/10 flex items-center gap-2"
+              className="px-6 py-3 rounded-2xl bg-primary hover:bg-primary-hover text-primary-text text-xs font-bold transition-all shadow-md shadow-primary/10 flex items-center gap-2"
             >
               {saved ? (
                 <>

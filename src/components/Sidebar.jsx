@@ -27,8 +27,8 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, onClos
             {/* Logo container */}
             <div className="w-8 h-8 rounded-lg bg-bg-card border border-border-card flex items-center justify-center relative overflow-hidden">
               {/* Custom abstract icon representing LocalDrop P2P */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#3b2eb5]/30 to-[#7b80ff]/30 opacity-50"></div>
-              <svg className="w-4 h-4 text-[#7b80ff] z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-primary/20 opacity-50"></div>
+              <svg className="w-4 h-4 text-primary z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
             </div>
@@ -56,7 +56,7 @@ export default function Sidebar({ activeTab, setActiveTab, isSidebarOpen, onClos
                 onClick={() => handleTabClick(item.id)}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-150 ${
                   isActive
-                    ? 'bg-[#7b80ff] text-white font-bold shadow-lg shadow-[#7b80ff]/10'
+                    ? 'bg-primary text-primary-text font-bold shadow-lg shadow-primary/10'
                     : 'text-text-muted hover:text-text-main hover:bg-bg-card-inner/50'
                 }`}
               >

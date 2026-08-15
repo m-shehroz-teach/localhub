@@ -51,7 +51,7 @@ export default function HeaderBar({ isConnected, deviceName, onToggleSidebar, th
         </button>
 
         {/* User Avatar Circle */}
-        <button className="w-9 h-9 rounded-full bg-[#7b80ff]/10 hover:bg-[#7b80ff]/20 border border-[#7b80ff]/20 flex items-center justify-center text-[#7b80ff] transition-colors">
+        <button className="w-9 h-9 rounded-full bg-primary-light hover:bg-primary/20 border border-primary-border flex items-center justify-center text-primary transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>

@@ -9,17 +9,31 @@
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --text-textarea: #3df5c2;
+
+  /* Theme Button & Accent Colors */
+  --primary: #6366f1; /* Modern Indigo 500 */
+  --primary-hover: #4f46e5; /* Indigo 600 */
+  --primary-text: #ffffff;
+  --primary-light: rgba(99, 102, 241, 0.15);
+  --primary-border: rgba(99, 102, 241, 0.25);
 }
 
 [data-theme="light"] {
-  --bg-app: #e2e8f0; /* light silver */
-  --bg-sidebar: #cbd5e1; /* slightly darker silver for sidebar */
-  --bg-card: #ffffff; /* pure white cards */
-  --bg-card-inner: #f8fafc; /* light silver inner card */
-  --border-card: rgba(148, 163, 184, 0.4);
-  --text-main: #000000; /* highest contrast black */
-  --text-muted: #0f172a; /* highest contrast charcoal */
-  --text-textarea: #0f766e; /* deep teal for readability */
+  --bg-app: #f1f5f9; /* Slate 100 */
+  --bg-sidebar: #e2e8f0; /* Slate 200 */
+  --bg-card: #ffffff; /* Pure White */
+  --bg-card-inner: #f8fafc; /* Slate 50 */
+  --border-card: rgba(148, 163, 184, 0.35);
+  --text-main: #0f172a; /* Slate 900 */
+  --text-muted: #475569; /* Slate 600 */
+  --text-textarea: #0f766e; /* Deep Teal for readability */
+
+  /* Theme Button & Accent Colors */
+  --primary: #4f46e5; /* Indigo 600 for better contrast on light */
+  --primary-hover: #3730a3; /* Indigo 800 */
+  --primary-text: #ffffff;
+  --primary-light: rgba(79, 70, 229, 0.08);
+  --primary-border: rgba(79, 70, 229, 0.2);
 }
 
 @theme {
@@ -30,15 +44,24 @@
   --color-border-card: var(--border-card);
   --color-text-main: var(--text-main);
   --color-text-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-text: var(--primary-text);
+  --color-primary-light: var(--primary-light);
+  --color-primary-border: var(--primary-border);
 }
 
 @layer base {
   body {
     background-color: var(--bg-app);
     color: var(--text-main);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  code, pre, textarea, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   }
 }
 
@@ -90,7 +113,8 @@
   background-color: var(--bg-sidebar) !important;
 }
 .bg-\[\#080b13\]\/40 {
-  background-color: rgba(var(--bg-app), 0.4) !important;
+  background-color: var(--bg-app) !important;
+  opacity: 0.7;
 }
 .bg-\[\#151a2d\]:hover {
   background-color: var(--bg-card-inner) !important;
