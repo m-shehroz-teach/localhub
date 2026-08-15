@@ -30,6 +30,18 @@ function generateRoomKey() {
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('localdrop_theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('localdrop_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   // Live Device Name loaded from cookie, localStorage
   const [deviceName, setDeviceName] = useState(() => getDeviceName());
@@ -153,7 +165,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080b13] text-slate-100 flex font-sans antialiased relative overflow-hidden">
+    <div className="min-h-screen bg-bg-app text-text-main flex font-sans antialiased relative overflow-hidden">
       {/* Mobile Sidebar Backdrop Overlay */}
       {isSidebarOpen && (
         <div 
@@ -174,6 +186,8 @@ export default function App() {
           isConnected={isConnected}
           deviceName={deviceName}
           onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
 
         <div className="flex-1 mt-2">

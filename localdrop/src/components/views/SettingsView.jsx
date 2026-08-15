@@ -55,50 +55,50 @@ export default function SettingsView({ deviceName, onSaveDeviceName }) {
       
       {/* Title */}
       <div>
-        <h2 className="text-3xl font-bold text-white tracking-tight">Settings</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <h2 className="text-3xl font-bold text-text-main tracking-tight">Settings</h2>
+        <p className="text-sm text-text-muted mt-1">
           Configure your device identity for peer discovery and local sharing.
         </p>
       </div>
 
       {/* Main Settings Panel */}
-      <div className="bg-[#0c0f1d] border border-[#1d263b]/50 rounded-3xl p-6 space-y-6">
+      <div className="bg-bg-card border border-border-card rounded-3xl p-6 space-y-6">
         
-        <div className="flex items-center gap-2.5 pb-2 border-b border-[#1d263b]/40">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-border-card">
           <Sliders className="w-4 h-4 text-[#7b80ff]" />
-          <h3 className="text-base font-bold text-white">General</h3>
+          <h3 className="text-base font-bold text-text-main">General</h3>
         </div>
 
         <form onSubmit={handleSave} className="space-y-5">
           {/* Device Name input */}
           <div>
-            <label className="block text-[10px] font-mono font-bold text-slate-500 uppercase tracking-wider mb-2">
+            <label className="block text-[10px] font-mono font-bold text-text-muted uppercase tracking-wider mb-2">
               DEVICE NAME
             </label>
-            <p className="text-xs text-slate-400 mb-3">
+            <p className="text-xs text-text-muted mb-3">
               This name will be visible to other devices on the network.
             </p>
             <input
               type="text"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
-              className="w-full bg-[#080b13] border border-[#1e273f] rounded-2xl px-4 py-3.5 text-sm font-semibold text-white focus:outline-none focus:border-[#7b80ff]/40"
+              className="w-full bg-bg-app border border-border-card rounded-2xl px-4 py-3.5 text-sm font-semibold text-text-main focus:outline-none focus:border-[#7b80ff]/40"
               placeholder="e.g. MacBook Pro"
             />
           </div>
 
           {/* Action Buttons at the bottom right */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-[#1d263b]/20">
+          <div className="flex justify-end gap-3 pt-4 border-t border-border-card">
             <button 
               type="button"
               onClick={handleReset}
-              className="px-5 py-3 rounded-2xl bg-[#080b13] border border-[#1d263b]/80 hover:bg-[#151a2d] text-slate-300 text-xs font-mono font-bold transition-all uppercase tracking-wider"
+              className="px-5 py-3 rounded-2xl bg-bg-app border border-border-card hover:bg-bg-card-inner text-text-muted text-xs font-mono font-bold transition-all uppercase tracking-wider"
             >
               Reset Defaults
             </button>
             <button 
               type="submit"
-              className="px-6 py-3 rounded-2xl bg-[#7b80ff] hover:bg-[#6c71f0] text-[#1a1754] text-xs font-bold transition-all shadow-md shadow-[#7b80ff]/10 flex items-center gap-2"
+              className="px-6 py-3 rounded-2xl bg-[#7b80ff] hover:bg-[#6c71f0] text-white text-xs font-bold transition-all shadow-md shadow-[#7b80ff]/10 flex items-center gap-2"
             >
               {saved ? (
                 <>

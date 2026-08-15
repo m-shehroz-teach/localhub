@@ -1,7 +1,7 @@
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Menu, Sun, Moon } from 'lucide-react';
 
-export default function HeaderBar({ isConnected, deviceName, onToggleSidebar }) {
+export default function HeaderBar({ isConnected, deviceName, onToggleSidebar, theme, onToggleTheme }) {
   const currentHost = window.location.host;
 
   return (
@@ -10,14 +10,14 @@ export default function HeaderBar({ isConnected, deviceName, onToggleSidebar }) 
         {/* Hamburger Menu for Mobile */}
         <button
           onClick={onToggleSidebar}
-          className="md:hidden p-2 rounded-xl bg-[#101622] border border-[#1e293b]/70 text-slate-300 hover:text-white hover:bg-[#161c2e]/50 focus:outline-none transition-colors"
+          className="md:hidden p-2 rounded-xl bg-bg-card-inner border border-border-card text-text-muted hover:text-text-main hover:bg-bg-sidebar focus:outline-none transition-colors"
           aria-label="Toggle Sidebar"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         {/* Local Host Tag */}
-        <div className="hidden xs:block bg-[#101622] border border-[#1e293b]/70 px-4 py-1.5 rounded-full text-xs font-mono font-medium text-slate-300 truncate max-w-[150px] sm:max-w-none">
+        <div className="hidden xs:block bg-bg-card-inner border border-border-card px-4 py-1.5 rounded-full text-xs font-mono font-medium text-text-muted truncate max-w-[150px] sm:max-w-none">
           IP: {currentHost}
         </div>
 
@@ -35,12 +35,28 @@ export default function HeaderBar({ isConnected, deviceName, onToggleSidebar }) 
         )}
       </div>
 
-      {/* User Avatar Circle */}
-      <button className="w-9 h-9 rounded-full bg-[#7b80ff]/10 hover:bg-[#7b80ff]/20 border border-[#7b80ff]/20 flex items-center justify-center text-[#7b80ff] transition-colors">
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-        </svg>
-      </button>
+      <div className="flex items-center gap-3">
+        {/* Theme Toggle Button */}
+        <button
+          onClick={onToggleTheme}
+          className="p-2 rounded-xl bg-bg-card-inner border border-border-card text-text-muted hover:text-text-main hover:bg-bg-sidebar focus:outline-none transition-all duration-200"
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          aria-label="Toggle Theme"
+        >
+          {theme === 'dark' ? (
+            <Sun className="w-5 h-5 text-amber-400" />
+          ) : (
+            <Moon className="w-5 h-5 text-indigo-500" />
+          )}
+        </button>
+
+        {/* User Avatar Circle */}
+        <button className="w-9 h-9 rounded-full bg-[#7b80ff]/10 hover:bg-[#7b80ff]/20 border border-[#7b80ff]/20 flex items-center justify-center text-[#7b80ff] transition-colors">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </button>
+      </div>
     </header>
   );
 }
