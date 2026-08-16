@@ -4,7 +4,7 @@ import {
   FileText, ArrowUpRight, ArrowDownLeft, CheckCircle2, 
   AlertCircle, Download
 } from 'lucide-react';
-
+import AdSense from '../AdSense';
 export default function RecentTransfersView({ filesHistory = [] }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState('all'); // 'all', 'sent', 'received'
@@ -328,6 +328,9 @@ export default function RecentTransfersView({ filesHistory = [] }) {
           Load More History
         </button>
       </div>
+
+      {/* Advertisement Unit */}
+      <AdSense slot="8015104816" />
 
     </div>
   );

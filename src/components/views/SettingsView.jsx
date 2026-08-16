@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sliders, Check, Save } from 'lucide-react';
-
+import AdSense from '../AdSense';
 export default function SettingsView({ deviceName, onSaveDeviceName }) {
   const [nameInput, setNameInput] = useState(() => {
     // Check Cookie
@@ -116,6 +116,9 @@ export default function SettingsView({ deviceName, onSaveDeviceName }) {
         </form>
 
       </div>
+
+      {/* Advertisement Unit */}
+      <AdSense slot="8015104816" />
 
     </div>
   );

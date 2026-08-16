@@ -8,6 +8,7 @@ import { DragDropSkeleton, QRCodeSkeleton, FaqSkeleton } from './Skeletons';
 const DragDropZone = lazy(() => import('./DragDropZone'));
 const QRCodeCard = lazy(() => import('./QRCodeCard'));
 const FaqSection = lazy(() => import('./FaqSection'));
+import AdSense from '../AdSense';
 
 export default function DashboardView({
   activeTransfer,
@@ -385,6 +386,9 @@ export default function DashboardView({
           {copied ? 'Link Copied!' : 'Copy Room Link'}
         </button>
       </div>
+
+      {/* Advertisement Unit */}
+      <AdSense slot="8015104816" />
 
       {/* FAQ Section */}
       <Suspense fallback={<FaqSkeleton />}>

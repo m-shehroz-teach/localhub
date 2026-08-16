@@ -3,7 +3,7 @@ import {
   Trash2, Copy, Check, Link, FileText, Code2, 
   Eye, EyeOff, ShieldAlert, Key, Globe
 } from 'lucide-react';
-
+import AdSense from '../AdSense';
 export default function SharedClipboardView({
   clipboardText,
   clipboardHistory = [],
@@ -227,6 +227,9 @@ export default function SharedClipboardView({
         </div>
 
       </div>
+
+      {/* Advertisement Unit */}
+      <AdSense slot="8015104816" />
 
     </div>
   );
