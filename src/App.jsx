@@ -31,7 +31,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('localdrop_theme') || 'dark';
+    return localStorage.getItem('localdrop_theme') || 'light';
   });
 
   useEffect(() => {
