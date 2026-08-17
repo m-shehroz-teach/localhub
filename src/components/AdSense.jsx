@@ -12,7 +12,9 @@ export default function AdSense({ slot = '8015104816' }) {
   }, []);
 
   return (
-    <div className="w-full my-6 overflow-hidden flex justify-center border border-border-card bg-bg-card-inner/30 rounded-2xl p-4">
+    <div className="w-full my-6 overflow-hidden flex justify-center border border-border-card bg-bg-card-inner/30 rounded-2xl p-4 flex-col items-center gap-2">
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3123345075285868"
+           crossorigin="anonymous"></script>
       <ins
         className="adsbygoogle"
         style={{ display: 'block', width: '100%', minWidth: '250px' }}
